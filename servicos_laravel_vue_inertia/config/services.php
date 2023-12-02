@@ -20,6 +20,9 @@ return [
     'token_type' => env('IMGUR_TOKEN_TYPE'),
     'refresh_token' => env('IMGUR_REFRESH_TOKEN')
   ],
+  'facebook' => [
+    'id_do_app' => env('FACEBOOK_ID_DO_APP')
+  ],
   'mailgun' => [
     'domain' => env('MAILGUN_DOMAIN'),
     'secret' => env('MAILGUN_SECRET'),

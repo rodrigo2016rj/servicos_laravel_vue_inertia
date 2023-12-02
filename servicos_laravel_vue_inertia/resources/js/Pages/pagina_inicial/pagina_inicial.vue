@@ -17,6 +17,9 @@
       }
     },
     methods: {
+      desfaz_selecao_de_texto(evento){
+        evento.preventDefault();
+      },
       expandir_ou_encolher_instrucoes(evento){
         const tag_que_disparou_o_evento = evento.currentTarget;
         const tag_alvo = tag_que_disparou_o_evento.parentNode.getElementsByClassName("instrucoes")[0];
@@ -58,7 +61,8 @@
           </h2>
           <div id="div_local_das_instrucoes_do_servico_publicar_imagem" class="local_das_instrucoes">
             <h4 id="h4_parte_de_cima_do_titulo_das_instrucoes_do_servico_publicar_imagem" 
-                class="parte_de_cima_do_titulo_das_instrucoes" @click="expandir_ou_encolher_instrucoes">
+                class="parte_de_cima_do_titulo_das_instrucoes" @click="expandir_ou_encolher_instrucoes" 
+                @mousedown="desfaz_selecao_de_texto">
               <span>Publicar Imagem</span>
             </h4>
             <div id="div_instrucoes_do_servico_publicar_imagem" class="instrucoes instrucoes_encolhidas">
@@ -112,7 +116,6 @@
                 Escolha esta opção, esta opção é o suficiente para este sistema e indica que a intenção é somente 
                 publicar imagens. Um envio de imagem sem ter um usuário autenticado pelo Imgur é considerado pelo Imgur 
                 como um envio anônimo e também é possível nas outras duas opções.
-                <br/>
               </p>
               <p>
                 O campo Authorization callback URL só precisa ser preenchido caso tenha escolhido e implementado 
@@ -174,8 +177,157 @@
               </p>
             </div>
             <h4 id="h4_parte_de_baixo_do_titulo_das_instrucoes_do_servico_publicar_imagem" 
-                class="parte_de_baixo_do_titulo_das_instrucoes" @click="expandir_ou_encolher_instrucoes">
+                class="parte_de_baixo_do_titulo_das_instrucoes" @click="expandir_ou_encolher_instrucoes" 
+                @mousedown="desfaz_selecao_de_texto">
               <span>Publicar Imagem</span>
+            </h4>
+          </div>
+          <div id="div_local_das_instrucoes_do_servico_login_com_facebook" class="local_das_instrucoes">
+            <h4 id="h4_parte_de_cima_do_titulo_das_instrucoes_do_servico_login_com_facebook" 
+                class="parte_de_cima_do_titulo_das_instrucoes" @click="expandir_ou_encolher_instrucoes" 
+                @mousedown="desfaz_selecao_de_texto">
+              <span>Login com Facebook</span>
+            </h4>
+            <div id="div_instrucoes_do_servico_login_com_facebook" class="instrucoes instrucoes_encolhidas">
+              <p>
+                Login (Serviço do Facebook) (25/11/2023)
+              </p>
+              <p>
+                Primeiro de tudo: Configure SSL (Secure Sockets Layer) ou TLS (Transport Layer Security) no seu 
+                ambiente de desenvolvimento, pois para utilizar o serviço de login do Facebook é necessário HTTPS.
+              </p>
+              <p>
+                Faça login no Facebook.
+              </p>
+              <p>
+                Acesse <a href="https://developers.facebook.com/apps">https://developers.facebook.com/apps</a>.
+              </p>
+              <p>
+                Se registre como desenvolvedor.
+              </p>
+              <p>
+                Clique em "Criar aplicativo".
+              </p>
+              <p>
+                Selecione:
+                <br/>
+                "Permitir que as pessoas entrem com a própria conta 
+                do Facebook Nosso caso de uso mais comum. Uma maneira 
+                segura, rápida e fácil para os usuários entrarem no app 
+                e para o app solicitar ao usuário permissões de acesso 
+                aos dados."
+              </p>
+              <p>
+                Clique em "avançar".
+              </p>
+              <p>
+                Preencha o formulário: nome do app e e-mail para contato.
+              </p>
+              <p>
+                Clique em "Criar aplicativo" (para você poder registrar seu aplicativo/sistema) no Facebook.
+              </p>
+              <p>
+                Você precisará confirmar inserindo sua senha do Facebook.
+              </p>
+              <p>
+                Após inserir, clique em "Enviar".
+              </p>
+              <p>
+                Você será redirecionado para uma página de painel do seu aplicativo:
+                <br/>
+                https://developers.facebook.com/apps/ID_DO_SEU_APLICATIVO/dashboard/
+              </p>
+              <p>
+                Copie o ID_DO_SEU_APLICATIVO e coloque como valor da chave FACEBOOK_ID_DO_APP no arquivo .env deste 
+                sistema.
+              </p>
+              <p>
+                Clique em "Casos de uso".
+              </p>
+              <p>
+                Você será redirecionado para a página:
+                <br/>
+                https://developers.facebook.com/apps/ID_DO_SEU_APLICATIVO/use_cases/
+              </p>
+              <p>
+                Em "Autenticação e criação de conta", clique em "Personalizar".
+              </p>
+              <p>
+                Você será redirecionado para a página:
+                <br/>
+                https://developers.facebook.com/apps/ID_DO_SEU_APLICATIVO/permissions?use_case_enum=FB_LOGIN
+              </p>
+              <p>
+                Em "Configurações", clique em "Acessar configurações".
+              </p>
+              <p>
+                Em "URIs de redirecionamento do OAuth válidos", adicione o endereço do seu sistema, exemplo:
+                <br/>
+                https://servicos-laravel-vue-inertia.local/login_com_facebook
+              </p>
+              <p>
+                Marque "Sim" para "Entrar com o SDK do JavaScript".
+              </p>
+              <p>
+                Em "Domínios permitidos para o SDK do JavaScript", adicione o domínio do seu sistema, exemplo:
+                <br/>
+                https://servicos-laravel-vue-inertia.local
+              </p>
+              <p>
+                Salve as configurações.
+              </p>
+              <p>
+                Estando novamente na página do painel (dashboard), clique em "Configurações do app".
+              </p>
+              <p>
+                Na parte de configurações básicas, em "Domínios do aplicativo", adicione o domínio do seu sistema, 
+                exemplo:
+                <br/>
+                https://servicos-laravel-vue-inertia.local
+              </p>
+              <p>
+                Salve as configurações.
+              </p>
+              <p>
+                Lembre-se que seu ambiente de desenvolvimento precisa estar com SSL ou TLS, pois só irá funcionar se 
+                estiver com https.
+              </p>
+              <p>
+                Agora você já é capaz de fazer login no seu sistema com a sua conta do Facebook.
+              </p>
+              <p>
+                Se tudo estiver certo, porém aparecer erro relacionado à CORS no seu navegador, desative plugins 
+                (addons de navegador) dos tipos bloqueador de anúncios e antirrastreio, e tente fazer login novamente.
+              </p>
+              <p>
+                Observações:
+                <br/>
+                No final da página do painel (dashboard), tem a opção para publicar/lançar o aplicativo, 
+                você precisará publicar/lançar o aplicativo para que outras pessoas (outras contas de Facebook)
+                possam utilizar o serviço de login do Facebook no seu sistema;
+                <br/>
+                Se você quiser, você pode criar um aplicativo de testes (vertente do aplicativo real) para 
+                deixar configurado para ambiente de desenvolvimento enquanto deixa o aplicativo real configurado 
+                para ambiente de produção. Para tal, na lista de aplicativos, no aplicativo que você criou, clique 
+                em "..." e depois clique em "Criar aplicativo de teste";
+                <br/>
+                No final da página de configurações avançadas é possível deletar o aplicativo criado.
+              </p>
+              <p>
+                Se tiver dúvida, consulte o tutorial do próprio Facebook:
+                <br/>
+                <a href="https://developers.facebook.com/docs/facebook-login/web">https://developers.facebook.com/docs/facebook-login/web</a>
+              </p>
+              <p>
+                Página da documentação:
+                <br/>
+                <a href="https://developers.facebook.com/docs/facebook-login/">https://developers.facebook.com/docs/facebook-login/</a>
+              </p>
+            </div>
+            <h4 id="h4_parte_de_baixo_do_titulo_das_instrucoes_do_servico_login_com_facebook" 
+                class="parte_de_baixo_do_titulo_das_instrucoes" @click="expandir_ou_encolher_instrucoes" 
+                @mousedown="desfaz_selecao_de_texto">
+              <span>Login com Facebook</span>
             </h4>
           </div>
         </div>

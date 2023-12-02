@@ -267,5 +267,4 @@ final class PublicarImagemController extends TemplateLayoutController{
     echo json_encode($retorno);
     die;
   }
-
 }

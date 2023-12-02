@@ -80,6 +80,9 @@ export default{
       <div id="div_grupo_02_de_itens_do_menu_template">
         <a id="link_publicar_imagem_template" href="/publicar_imagem">Publicar Imagem</a>
       </div>
+      <div id="div_grupo_03_de_itens_do_menu_template">
+        <a id="link_login_com_facebook_template" href="/login_com_facebook">Login com Facebook</a>
+      </div>
     </div>
     <slot name="conteudo"></slot>
   </div>
