@@ -18,8 +18,9 @@
         vue_login_com_facebook: this.login_com_facebook,
         
         /* Propriedades novas e seus valores iniciais */
+        token_de_acesso: null,
         usuario_esta_autenticado: null,
-        versao_da_api_do_facebook: "v18.0",
+        id_do_usuario_autenticado_pelo_facebook: null,
         nome_do_usuario_autenticado_pelo_facebook: null,
         
         mostrar_popup_aviso: false,
@@ -36,35 +37,43 @@
           appId: this.vue_login_com_facebook.id_do_app,
           cookie: true,
           xfbml: true,
-          version: this.versao_da_api_do_facebook
+          version: this.vue_login_com_facebook.versao_da_api
         });
         
         FB.getLoginStatus(function(resposta){
+          this.token_de_acesso = null;
           this.usuario_esta_autenticado = null;
+          this.id_do_usuario_autenticado_pelo_facebook = null;
           this.nome_do_usuario_autenticado_pelo_facebook = null;
           
           if(resposta.status === "connected"){
+            this.token_de_acesso = resposta.authResponse.accessToken;
             if(resposta.authResponse){
-              axios.get("https://graph.facebook.com/" + this.versao_da_api_do_facebook + "/me", {
+              axios.get("https://graph.facebook.com/" + this.vue_login_com_facebook.versao_da_api + "/me", {
                 params: {
                   access_token: resposta.authResponse.accessToken,
                   method: "get",
                   pretty: "0",
-                  sdk: this.versao_da_api_do_facebook,
+                  sdk: this.vue_login_com_facebook.versao_da_api,
                   suppress_http_code: "1"
                 }
               }).then(resposta => {
                 if(typeof resposta.data.name != "undefined" && resposta.data.name !== null){
                   this.usuario_esta_autenticado = true;
+                  this.id_do_usuario_autenticado_pelo_facebook = resposta.data.id;
                   this.nome_do_usuario_autenticado_pelo_facebook = resposta.data.name;
                 }else{
                   this.desconectar_a_conta_do_facebook(false);
+                  this.token_de_acesso = null;
                   this.usuario_esta_autenticado = false;
+                  this.id_do_usuario_autenticado_pelo_facebook = null;
                   this.nome_do_usuario_autenticado_pelo_facebook = null;
                 }
               }).catch(function(excecao){
                 this.desconectar_a_conta_do_facebook(false);
+                this.token_de_acesso = null;
                 this.usuario_esta_autenticado = false;
+                this.id_do_usuario_autenticado_pelo_facebook = null;
                 this.nome_do_usuario_autenticado_pelo_facebook = null;
               }.bind(this));
               
@@ -72,15 +81,20 @@
               // FB.api("/me", {fields: "name"}, function(resposta){
               //   if(typeof resposta.name != "undefined" && resposta.name !== null){
               //     this.usuario_esta_autenticado = true;
+              //     this.id_do_usuario_autenticado_pelo_facebook = resposta.id;
               //     this.nome_do_usuario_autenticado_pelo_facebook = resposta.name;
               //   }else{
+              //     this.token_de_acesso = null;
               //     this.usuario_esta_autenticado = false;
+              //     this.id_do_usuario_autenticado_pelo_facebook = null;
               //     this.nome_do_usuario_autenticado_pelo_facebook = null;
               //   }
               // }.bind(this));
             }
           }else{
+            this.token_de_acesso = null;
             this.usuario_esta_autenticado = false;
+            this.id_do_usuario_autenticado_pelo_facebook = null;
             this.nome_do_usuario_autenticado_pelo_facebook = null;
           }
         }.bind(this));
@@ -129,23 +143,27 @@
         if(this.usuario_esta_autenticado){
           //Reconectar
           FB.logout(function(resposta){
+            this.token_de_acesso = null;
             this.usuario_esta_autenticado = false;
+            this.id_do_usuario_autenticado_pelo_facebook = null;
             this.nome_do_usuario_autenticado_pelo_facebook = null;
             
             FB.login(function(resposta){
               if(resposta.status === "connected"){
+              this.token_de_acesso = resposta.authResponse.accessToken;
                 if(resposta.authResponse){
-                  axios.get("https://graph.facebook.com/" + this.versao_da_api_do_facebook + "/me", {
+                  axios.get("https://graph.facebook.com/" + this.vue_login_com_facebook.versao_da_api + "/me", {
                     params: {
                       access_token: resposta.authResponse.accessToken,
                       method: "get",
                       pretty: "0",
-                      sdk: this.versao_da_api_do_facebook,
+                      sdk: this.vue_login_com_facebook.versao_da_api,
                       suppress_http_code: "1"
                     }
                   }).then(resposta => {
                     if(typeof resposta.data.name != "undefined" && resposta.data.name !== null){
                       this.usuario_esta_autenticado = true;
+                      this.id_do_usuario_autenticado_pelo_facebook = resposta.data.id;
                       this.nome_do_usuario_autenticado_pelo_facebook = resposta.data.name;
                       this.aviso = "Você conectou sua conta do Facebook com sucesso.";
                       this.largura_da_div_aviso = "480px";
@@ -153,7 +171,9 @@
                     }
                   }).catch(function(excecao){
                     this.desconectar_a_conta_do_facebook(false);
+                    this.token_de_acesso = null;
                     this.usuario_esta_autenticado = false;
+                    this.id_do_usuario_autenticado_pelo_facebook = null;
                     this.nome_do_usuario_autenticado_pelo_facebook = null;
                     this.aviso = "Conecção com Facebook falhou, tente novamente após desativar addons antirrastreio do seu navegador caso tenha algum instalado.";
                     this.largura_da_div_aviso = "480px";
@@ -172,18 +192,20 @@
           //Conectar
           FB.login(function(resposta){
             if(resposta.status === "connected"){
+              this.token_de_acesso = resposta.authResponse.accessToken;
               if(resposta.authResponse){
-                axios.get("https://graph.facebook.com/" + this.versao_da_api_do_facebook + "/me", {
+                axios.get("https://graph.facebook.com/" + this.vue_login_com_facebook.versao_da_api + "/me", {
                   params: {
                     access_token: resposta.authResponse.accessToken,
                     method: "get",
                     pretty: "0",
-                    sdk: this.versao_da_api_do_facebook,
+                    sdk: this.vue_login_com_facebook.versao_da_api,
                     suppress_http_code: "1"
                   }
                 }).then(resposta => {
                   if(typeof resposta.data.name != "undefined" && resposta.data.name !== null){
                     this.usuario_esta_autenticado = true;
+                    this.id_do_usuario_autenticado_pelo_facebook = resposta.data.id;
                     this.nome_do_usuario_autenticado_pelo_facebook = resposta.data.name;
                     this.aviso = "Você conectou sua conta do Facebook com sucesso.";
                     this.largura_da_div_aviso = "480px";
@@ -191,7 +213,9 @@
                   }
                 }).catch(function(excecao){
                   this.desconectar_a_conta_do_facebook(false);
+                  this.token_de_acesso = null;
                   this.usuario_esta_autenticado = false;
+                  this.id_do_usuario_autenticado_pelo_facebook = null;
                   this.nome_do_usuario_autenticado_pelo_facebook = null;
                   this.aviso = "Conecção com Facebook falhou, tente novamente após desativar addons antirrastreio do seu navegador caso tenha algum instalado.";
                   this.largura_da_div_aviso = "480px";
@@ -217,7 +241,9 @@
         }
         
         FB.logout(function(resposta){
+          this.token_de_acesso = null;
           this.usuario_esta_autenticado = false;
+          this.id_do_usuario_autenticado_pelo_facebook = null;
           this.nome_do_usuario_autenticado_pelo_facebook = null;
           
           if(mostrar_aviso){
@@ -226,6 +252,26 @@
             this.exibir_popup_aviso();
           }
         }.bind(this));
+      },
+      verificar_acesso(evento){
+        evento.currentTarget.blur();
+        
+        if(this.usuario_esta_autenticado){
+          axios.get("login_com_facebook/exemplo_de_funcionalidade_que_necessita_de_autenticacao_ajax", {
+            params: {
+              token_de_acesso: this.token_de_acesso,
+              id_do_usuario: this.id_do_usuario_autenticado_pelo_facebook
+            }
+          }).then(resposta => {
+            this.aviso = resposta.data.aviso;
+            this.largura_da_div_aviso = resposta.data.largura_do_aviso + "px";
+            this.exibir_popup_aviso();
+          });
+        }else{
+          this.aviso = "Você precisa conectar sua conta do Facebook antes de verificar o acesso.";
+          this.largura_da_div_aviso = "500px";
+          this.exibir_popup_aviso();
+        }
       },
       remover_popups(){
         this.mostrar_popup_aviso = false;
@@ -337,14 +383,25 @@
               Analisando conexão...
             </span>
           </div>
-          <div id="div_instrucoes">
+          <div id="div_instrucoes_da_autenticacao">
             <span>Conectar/Desconectar conta do Facebook para este sistema.</span>
           </div>
-          <div id="div_botoes">
+          <div id="div_botoes_da_autenticacao">
             <button id="botao_conectar" type="button" @mouseleave="remover_foco_do_botao" 
                     @click="conectar_a_conta_do_facebook">Conectar</button>
             <button id="botao_desconectar" type="button" @mouseleave="remover_foco_do_botao" 
                     @click="desconectar_a_conta_do_facebook(true, $event)">Desconectar</button>
+          </div>
+        </div>
+        <div id="div_exemplo_de_funcionalidade_que_necessita_de_autenticacao" v-if="token_de_acesso">
+          <div id="div_instrucoes_da_funcionalidade">
+            <span>
+              Clique no botão "Verificar Acesso" para verificar se este sistema reconhece sua conexão com o Facebook.
+            </span>
+          </div>
+          <div id="div_botao_da_funcionalidade">
+            <button id="botao_verificar_acesso" type="button" @mouseleave="remover_foco_do_botao" 
+                    @click="verificar_acesso">Verificar Acesso</button>
           </div>
         </div>
         <div id="div_aviso" class="tag_oculta">
@@ -416,8 +473,10 @@
       margin-top: 20px;
     }
   }
-  #div_status_da_autenticacao{
+  #div_autenticacao_com_facebook{
     margin-top: 30px;
+  }
+  #div_status_da_autenticacao{
     margin-right: auto;
     margin-left: auto;
     max-width: 500px;
@@ -432,7 +491,7 @@
   #span_status_analisando_conexao{
     color: #000;
   }
-  #div_instrucoes{
+  #div_instrucoes_da_autenticacao{
     margin-top: 30px;
     margin-right: auto;
     margin-left: auto;
@@ -440,11 +499,11 @@
     text-align: center;
   }
   @media(max-width: 640px){
-    #div_instrucoes{
+    #div_instrucoes_da_autenticacao{
       max-width: 300px;
     }
   }
-  #div_botoes{
+  #div_botoes_da_autenticacao{
     margin-top: 30px;
     margin-right: auto;
     margin-left: auto;
@@ -458,6 +517,33 @@
   #botao_desconectar{
     display: inline-block;
     margin-left: 20px;
+    vertical-align: top;
+  }
+  #div_exemplo_de_funcionalidade_que_necessita_de_autenticacao{
+    margin-top: 70px;
+  }
+  #div_instrucoes_da_funcionalidade{
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 580px;
+    text-align: justify;
+    text-indent: 70px;
+  }
+  @media(max-width: 640px){
+    #div_instrucoes_da_funcionalidade{
+      max-width: 350px;
+      text-indent: 35px;
+    }
+  }
+  #div_botao_da_funcionalidade{
+    margin-top: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 500px;
+    text-align: center;
+  }
+  #botao_verificar_acesso{
+    display: inline-block;
     vertical-align: top;
   }
   #div_aviso{

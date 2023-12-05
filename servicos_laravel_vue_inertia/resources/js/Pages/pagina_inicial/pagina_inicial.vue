@@ -319,9 +319,11 @@
                 <a href="https://developers.facebook.com/docs/facebook-login/web">https://developers.facebook.com/docs/facebook-login/web</a>
               </p>
               <p>
-                Página da documentação:
+                Páginas de documentação:
                 <br/>
-                <a href="https://developers.facebook.com/docs/facebook-login/">https://developers.facebook.com/docs/facebook-login/</a>
+                <a href="https://developers.facebook.com/docs/facebook-login">https://developers.facebook.com/docs/facebook-login</a>
+                <br/>
+                <a href="https://developers.facebook.com/docs/graph-api">https://developers.facebook.com/docs/graph-api</a>
               </p>
             </div>
             <h4 id="h4_parte_de_baixo_do_titulo_das_instrucoes_do_servico_login_com_facebook" 

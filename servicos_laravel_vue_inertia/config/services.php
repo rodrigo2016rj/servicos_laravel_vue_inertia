@@ -21,7 +21,8 @@ return [
     'refresh_token' => env('IMGUR_REFRESH_TOKEN')
   ],
   'facebook' => [
-    'id_do_app' => env('FACEBOOK_ID_DO_APP')
+    'id_do_app' => env('FACEBOOK_ID_DO_APP'),
+    'versao_da_api' => env('FACEBOOK_VERSAO_DA_API')
   ],
   'mailgun' => [
     'domain' => env('MAILGUN_DOMAIN'),

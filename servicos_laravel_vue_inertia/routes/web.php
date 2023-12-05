@@ -29,3 +29,4 @@ Route::get('/publicar_imagem/mostrar_imagens_publicadas_ajax', [PublicarImagemCo
 
 /* Login com Facebook */
 Route::get('/login_com_facebook', [LoginComFacebookController::class, 'carregar_pagina']);
+Route::get('/login_com_facebook/exemplo_de_funcionalidade_que_necessita_de_autenticacao_ajax', [LoginComFacebookController::class, 'exemplo_de_funcionalidade_que_necessita_de_autenticacao_ajax']);
