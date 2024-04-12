@@ -5,17 +5,6 @@ use App\Http\Controllers\PaginaInicialController;
 use App\Http\Controllers\PublicarImagemController;
 use App\Http\Controllers\LoginComFacebookController;
 
-/*
-  |--------------------------------------------------------------------------
-  | Web Routes
-  |--------------------------------------------------------------------------
-  |
-  | Here is where you can register web routes for your application. These
-  | routes are loaded by the RouteServiceProvider and all of them will
-  | be assigned to the "web" middleware group. Make something great!
-  |
- */
-
 /* Página Padrão */
 Route::get('/', [PaginaInicialController::class, 'carregar_pagina']);
 
